@@ -29,6 +29,7 @@ import (
 	keyringimportjob "github.com/upbound/provider-gcp/internal/controller/kms/keyringimportjob"
 	secretciphertext "github.com/upbound/provider-gcp/internal/controller/kms/secretciphertext"
 	providerconfig "github.com/upbound/provider-gcp/internal/controller/providerconfig"
+	databaseinstance "github.com/upbound/provider-gcp/internal/controller/sql/databaseinstance"
 	bucket "github.com/upbound/provider-gcp/internal/controller/storage/bucket"
 	bucketiammember "github.com/upbound/provider-gcp/internal/controller/storage/bucketiammember"
 )
@@ -57,6 +58,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		keyringimportjob.Setup,
 		secretciphertext.Setup,
 		providerconfig.Setup,
+		databaseinstance.Setup,
 		bucket.Setup,
 		bucketiammember.Setup,
 	} {

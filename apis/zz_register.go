@@ -27,6 +27,7 @@ import (
 	v1beta1kms "github.com/upbound/provider-gcp/apis/kms/v1beta1"
 	v1beta1storage "github.com/upbound/provider-gcp/apis/storage/v1beta1"
 	v1beta1apis "github.com/upbound/provider-gcp/apis/v1beta1"
+	v1beta1sql "github.com/upbound/provider-gcp/apis/sql/v1beta1"
 )
 
 func init() {
@@ -37,6 +38,7 @@ func init() {
 		v1beta1kms.SchemeBuilder.AddToScheme,
 		v1beta1storage.SchemeBuilder.AddToScheme,
 		v1beta1apis.SchemeBuilder.AddToScheme,
+		v1beta1sql.SchemeBuilder.AddToScheme,
 	)
 }
 
