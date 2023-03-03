@@ -7,8 +7,9 @@ package controller
 import (
 	ctrl "sigs.k8s.io/controller-runtime"
 
-	"github.com/upbound/upjet/pkg/controller"
+       "github.com/upbound/upjet/pkg/controller"
 
+	projectiamcustomrole "github.com/upbound/provider-gcp/internal/controller/cloudplatform/projectiamcustomrole"
 	projectiammember "github.com/upbound/provider-gcp/internal/controller/cloudplatform/projectiammember"
 	serviceaccount "github.com/upbound/provider-gcp/internal/controller/cloudplatform/serviceaccount"
 	serviceaccountiammember "github.com/upbound/provider-gcp/internal/controller/cloudplatform/serviceaccountiammember"
@@ -30,6 +31,7 @@ import (
 	secretciphertext "github.com/upbound/provider-gcp/internal/controller/kms/secretciphertext"
 	providerconfig "github.com/upbound/provider-gcp/internal/controller/providerconfig"
 	databaseinstance "github.com/upbound/provider-gcp/internal/controller/sql/databaseinstance"
+	user "github.com/upbound/provider-gcp/internal/controller/sql/user"
 	bucket "github.com/upbound/provider-gcp/internal/controller/storage/bucket"
 	bucketiammember "github.com/upbound/provider-gcp/internal/controller/storage/bucketiammember"
 )
@@ -38,6 +40,7 @@ import (
 // the supplied manager.
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
+		projectiamcustomrole.Setup,
 		projectiammember.Setup,
 		serviceaccount.Setup,
 		serviceaccountiammember.Setup,
@@ -59,6 +62,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		secretciphertext.Setup,
 		providerconfig.Setup,
 		databaseinstance.Setup,
+		user.Setup,
 		bucket.Setup,
 		bucketiammember.Setup,
 	} {

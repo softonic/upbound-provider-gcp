@@ -25,8 +25,57 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
+type PasswordPolicyObservation struct {
+	Status []StatusObservation `json:"status,omitempty" tf:"status,omitempty"`
+}
+
+type PasswordPolicyParameters struct {
+
+	// Number of failed attempts allowed before the user get locked.
+	// +kubebuilder:validation:Optional
+	AllowedFailedAttempts *float64 `json:"allowedFailedAttempts,omitempty" tf:"allowed_failed_attempts,omitempty"`
+
+	// If true, the check that will lock user after too many failed login attempts will be enabled.
+	// +kubebuilder:validation:Optional
+	EnableFailedAttemptsCheck *bool `json:"enableFailedAttemptsCheck,omitempty" tf:"enable_failed_attempts_check,omitempty"`
+
+	// If true, the user must specify the current password before changing the password. This flag is supported only for MySQL.
+	// +kubebuilder:validation:Optional
+	EnablePasswordVerification *bool `json:"enablePasswordVerification,omitempty" tf:"enable_password_verification,omitempty"`
+
+	// Password expiration duration with one week grace period.
+	// +kubebuilder:validation:Optional
+	PasswordExpirationDuration *string `json:"passwordExpirationDuration,omitempty" tf:"password_expiration_duration,omitempty"`
+}
+
+type SQLServerUserDetailsObservation struct {
+	Disabled *bool `json:"disabled,omitempty" tf:"disabled,omitempty"`
+
+	ServerRoles []*string `json:"serverRoles,omitempty" tf:"server_roles,omitempty"`
+}
+
+type SQLServerUserDetailsParameters struct {
+}
+
+type StatusObservation struct {
+
+	// (read only) If true, user does not have login privileges.
+	Locked *bool `json:"locked,omitempty" tf:"locked,omitempty"`
+
+	// (read only) Password expiration duration with one week grace period.
+	PasswordExpirationTime *string `json:"passwordExpirationTime,omitempty" tf:"password_expiration_time,omitempty"`
+}
+
+type StatusParameters struct {
+}
+
 type UserObservation struct {
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
+
+	// +kubebuilder:validation:Optional
+	PasswordPolicy []PasswordPolicyObservation `json:"passwordPolicy,omitempty" tf:"password_policy,omitempty"`
+
+	SQLServerUserDetails []SQLServerUserDetailsObservation `json:"sqlServerUserDetails,omitempty" tf:"sql_server_user_details,omitempty"`
 }
 
 type UserParameters struct {
@@ -38,7 +87,7 @@ type UserParameters struct {
 	DeletionPolicy *string `json:"deletionPolicy,omitempty" tf:"deletion_policy,omitempty"`
 
 	// The host the user can connect from. This is only supported
-	// for MySQL instances. Don't set this field for PostgreSQL instances.
+	// for BUILT_IN users in MySQL instances. Don't set this field for PostgreSQL and SQL Server instances.
 	// Can be an IP address. Changing this forces a new resource to be created.
 	// +kubebuilder:validation:Optional
 	Host *string `json:"host,omitempty" tf:"host,omitempty"`
@@ -57,9 +106,13 @@ type UserParameters struct {
 	// +kubebuilder:validation:Optional
 	InstanceSelector *v1.Selector `json:"instanceSelector,omitempty" tf:"-"`
 
+	// +kubebuilder:validation:Optional
+	PasswordPolicy []PasswordPolicyParameters `json:"passwordPolicy,omitempty" tf:"password_policy,omitempty"`
+
 	// The password for the user. Can be updated. For Postgres
 	// instances this is a Required field, unless type is set to either CLOUD_IAM_USER
-	// or CLOUD_IAM_SERVICE_ACCOUNT.
+	// or CLOUD_IAM_SERVICE_ACCOUNT. Don't set this field for CLOUD_IAM_USER
+	// and CLOUD_IAM_SERVICE_ACCOUNT user types for any Cloud SQL instance.
 	// +kubebuilder:validation:Optional
 	PasswordSecretRef *v1.SecretKeySelector `json:"passwordSecretRef,omitempty" tf:"-"`
 

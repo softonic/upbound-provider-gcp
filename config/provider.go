@@ -43,6 +43,8 @@ import (
 	"github.com/upbound/provider-gcp/config/endpoints"
 	"github.com/upbound/provider-gcp/config/firebaserules"
 	"github.com/upbound/provider-gcp/config/gameservices"
+	"github.com/upbound/provider-gcp/config/gkehub"
+	"github.com/upbound/provider-gcp/config/healthcare"
 	"github.com/upbound/provider-gcp/config/iap"
 	"github.com/upbound/provider-gcp/config/identityplatform"
 	"github.com/upbound/provider-gcp/config/kms"
@@ -58,7 +60,9 @@ import (
 	"github.com/upbound/provider-gcp/config/spanner"
 	"github.com/upbound/provider-gcp/config/sql"
 	"github.com/upbound/provider-gcp/config/storage"
+	"github.com/upbound/provider-gcp/config/tpu"
 	"github.com/upbound/provider-gcp/config/vertexai"
+	"github.com/upbound/provider-gcp/config/vpcaccess"
 )
 
 const (
@@ -185,6 +189,10 @@ func GetProvider() *tjconfig.Provider {
 		bigquery.Configure,
 		beyondcorp.Configure,
 		vertexai.Configure,
+		tpu.Configure,
+		vpcaccess.Configure,
+		healthcare.Configure,
+		gkehub.Configure,
 	} {
 		configure(pc)
 	}

@@ -24,6 +24,8 @@ var externalNameConfigs = map[string]config.ExternalName{
 	"google_app_engine_service_network_settings": config.IdentifierFromProvider,
 	// apps/{{project}}/services/{{service}}/versions/{{version_id}}
 	"google_app_engine_standard_app_version": config.TemplatedStringAsIdentifier("version_id", "apps/{{ .setup.configuration.project }}/services/{{ .parameters.service }}/versions/{{ .external_name }}"),
+	// apps/{{project}}/firewall/ingressRules/{{priority}}
+	"google_app_engine_firewall_rule": config.IdentifierFromProvider,
 
 	// composer
 	//
@@ -36,6 +38,11 @@ var externalNameConfigs = map[string]config.ExternalName{
 	"google_cloudfunctions_function": config.TemplatedStringAsIdentifier("name", "{{ .setup.configuration.project }}/{{ .parameters.region }}/{{ .external_name }}"),
 	// Imported by using the following format: projects/{{project}}/locations/{{region}}/functions/{{cloud_function}} roles/viewer user:jane@example.com
 	"google_cloudfunctions_function_iam_member": config.IdentifierFromProvider,
+
+	// cloudfunctions2
+	//
+	// Imported by using the following projects/{{project}}/locations/{{location}}/functions/{{name}}
+	"google_cloudfunctions2_function": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/locations/{{ .parameters.location }}/functions/{{ .external_name }}"),
 
 	// cloudplatform
 	//
@@ -73,6 +80,8 @@ var externalNameConfigs = map[string]config.ExternalName{
 	"google_service_account_key": config.IdentifierFromProvider,
 	// Imported by using the following format: services/{service}/projects/{project}/global/networks/{network}/peeredDnsDomains/{name}
 	"google_service_networking_peered_dns_domain": config.TemplatedStringAsIdentifier("name", "services/{{ .parameters.service }}/projects/{{ .setup.configuration.project }}/global/networks/{{ .parameters.network }}/peeredDnsDomains/{{ .external_name }}"),
+	// Imported by using the following projects/{{project}}/roles/{{role_id}}
+	"google_project_iam_custom_role": config.TemplatedStringAsIdentifier("role_id", "projects/{{ .setup.configuration.project }}/roles/{{ .external_name }}"),
 
 	// cloudrun
 	//
@@ -266,6 +275,22 @@ var externalNameConfigs = map[string]config.ExternalName{
 	"google_compute_vpn_gateway": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/regions/{{ .parameters.region }}/targetVpnGateways/{{ .external_name }}"),
 	// Imported by using the following format: projects/{{project}}/regions/{{region}}/vpnTunnels/{{name}}
 	"google_compute_vpn_tunnel": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/regions/{{ .parameters.region }}/vpnTunnels/{{ .external_name }}"),
+	// No import
+	"google_compute_backend_service_signed_url_key": config.IdentifierFromProvider,
+	// Imported by using the following projects/{{project}}/global/firewallPolicies/{{name}}
+	"google_compute_network_firewall_policy": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/global/firewallPolicies/{{ .external_name }}"),
+	// Imported by using the following projects/{{project}}/global/firewallPolicies/{{firewall_policy}}/associations/{{name}}
+	"google_compute_network_firewall_policy_association": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/global/firewallPolicies/{{ .parameters.firewall_policy }}/associations/{{ .external_name }}"),
+	// Imported by using the following projects/{{project}}/regions/{{region}}/firewallPolicies/{{name}}
+	"google_compute_region_network_firewall_policy": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/regions/{{ .parameters.region }}/firewallPolicies/{{ .external_name }}"),
+	// Imported by using the following projects/{{project}}/regions/{{region}}/firewallPolicies/{{firewall_policy}}/associations/{{name}}
+	"google_compute_region_network_firewall_policy_association": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/regions/{{ .parameters.region }}/firewallPolicies/{{ .parameters.firewall_policy }}/associations/{{ .external_name }}"),
+	// Imported by using the following projects/{{project}}/global/snapshots/{{name}}
+	"google_compute_snapshot": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/global/snapshots/{{ .external_name }}"),
+	// Imported by using the following projects/{{project}}/global/sslPolicies/{{name}}
+	"google_compute_ssl_policy": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/global/sslPolicies/{{ .external_name }}"),
+	// Imported by using the following projects/{{project}}/global/snapshots/{{snapshot}} roles/viewer user:jane@example.com
+	"google_compute_snapshot_iam_member": config.IdentifierFromProvider,
 
 	// container
 	//
@@ -341,6 +366,24 @@ var externalNameConfigs = map[string]config.ExternalName{
 	"google_dialogflow_cx_intent":      config.IdentifierFromProvider,
 	"google_dialogflow_cx_page":        config.IdentifierFromProvider,
 	"google_dialogflow_cx_version":     config.IdentifierFromProvider,
+	// Imported by using the following {{parent}}/webhooks/{{name}}
+	"google_dialogflow_cx_webhook": config.IdentifierFromProvider,
+
+	// datastream
+	//
+	// Imported by using the following projects/{{project}}/locations/{{location}}/connectionProfiles/{{connection_profile_id}}
+	"google_datastream_connection_profile": config.TemplatedStringAsIdentifier("connection_profile_id", "projects/{{ .setup.configuration.project }}/locations/{{ .parameters.location }}/connectionProfiles/{{ .external_name }}"),
+	// Imported by using the following projects/{{project}}/locations/{{location}}/privateConnections/{{private_connection_id}}
+	"google_datastream_private_connection": config.TemplatedStringAsIdentifier("private_connection_id", "projects/{{ .setup.configuration.project }}/locations/{{ .parameters.location }}/privateConnections/{{ .external_name }}"),
+
+	// dataplex
+	//
+	// Imported by using the following format: projects/{{project}}/locations/{{location}}/lakes/{{name}}
+	"google_dataplex_lake": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/locations/{{ .parameters.location }}/lakes/{{ .external_name }}"),
+	// Imported by using the following projects/{{project}}/locations/{{location}}/lakes/{{lake}}/zones/{{dataplex_zone}}/assets/{{name}}
+	"google_dataplex_asset": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/locations/{{ .parameters.location }}/lakes/{{ .parameters.lake }}/zones/{{ .parameters.dataplex_zone }}/assets/{{ .external_name }}"),
+	// Imported by using the following projects/{{project}}/locations/{{location}}/lakes/{{lake}}/zones/{{name}}
+	"google_dataplex_zone": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/locations/{{ .parameters.location }}/lakes/{{ .parameters.lake }}/zones/{{ .external_name }}"),
 
 	// dns
 	//
@@ -350,6 +393,8 @@ var externalNameConfigs = map[string]config.ExternalName{
 	"google_dns_policy": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/policies/{{ .external_name }}"),
 	// Imported by using the following format: projects/{{project}}/managedZones/{{zone}}/rrsets/{{name}}/{{type}}
 	"google_dns_record_set": config.IdentifierFromProvider,
+	// Imported by using the following projects/{{project}}/managedZones/{{managed_zone}} roles/viewer user:jane@example.com
+	"google_dns_managed_zone_iam_member": config.IdentifierFromProvider,
 
 	// endpoints
 	//
@@ -370,11 +415,19 @@ var externalNameConfigs = map[string]config.ExternalName{
 	//
 	// Imported by using the following format: projects/{{project}}/locations/{{location}}/triggers/{{name}}
 	"google_eventarc_trigger": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/locations/{{ .parameters.location }}/triggers/{{ .external_name }}"),
+	// Imported by using the following projects/{{project}}/locations/{{location}}/channels/{{name}}
+	"google_eventarc_channel": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/locations/{{ .parameters.location }}/channels/{{ .external_name }}"),
+	// Imported by using the following projects/{{project}}/locations/{{location}}/googleChannelConfig
+	"google_eventarc_google_channel_config": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/locations/{{ .parameters.location }}/googleChannelConfig"),
 
 	// filestore
 	//
 	// Imported by using the following format: projects/{{project}}/locations/{{location}}/instances/{{name}}
 	"google_filestore_instance": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/locations/{{ .parameters.location }}/instances/{{ .external_name }}"),
+	// Imported by using the following projects/{{project}}/locations/{{location}}/backups/{{name}}
+	"google_filestore_backup": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/locations/{{ .parameters.location }}/backups/{{ .external_name }}"),
+	// Imported by using the following projects/{{project}}/locations/{{location}}/instances/{{instance}}/snapshots/{{name}}
+	"google_filestore_snapshot": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/locations/{{ .parameters.location }}/instances/{{ .parameters.instance }}/snapshots/{{ .external_name }}"),
 
 	// firebaserules
 	//
@@ -412,6 +465,13 @@ var externalNameConfigs = map[string]config.ExternalName{
 	//
 	// Imported by using the following format: projects/{{project}}/locations/global/memberships/{{membership_id}}
 	"google_gke_hub_membership": config.TemplatedStringAsIdentifier("membership_id", "projects/{{ .setup.configuration.project }}/locations/global/memberships/{{ .external_name }}"),
+	// Imported by using the following projects/{{project}}/locations/{{location}}/memberships/{{membership_id}} roles/viewer user:jane@example.com
+	"google_gke_hub_membership_iam_member": config.IdentifierFromProvider,
+
+	// gke
+	//
+	// Imported by using the following projects/{{project}}/locations/{{location}}/backupPlans/{{name}}
+	"google_gke_backup_backup_plan": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/locations/{{ .parameters.location }}/backupPlans/{{ .external_name }}"),
 
 	// healthcare
 	//
@@ -419,6 +479,8 @@ var externalNameConfigs = map[string]config.ExternalName{
 	"google_healthcare_consent_store": config.IdentifierFromProvider,
 	// Imported by using the following format: projects/{{project}}/locations/{{location}}/datasets/{{name}}
 	"google_healthcare_dataset": config.IdentifierFromProvider,
+	// Imported by using the following format: your-project-id/location-name/dataset-name roles/viewer user:foo@example.com
+	"google_healthcare_dataset_iam_member": config.IdentifierFromProvider,
 
 	// iap
 	//
@@ -430,6 +492,12 @@ var externalNameConfigs = map[string]config.ExternalName{
 	"google_iap_web_type_app_engine_iam_member": config.IdentifierFromProvider,
 	// Imported by using the following format: projects/{{project}}/iap_web/compute roles/iap.httpsResourceAccessor user:jane@example.com
 	"google_iap_web_type_compute_iam_member": config.IdentifierFromProvider,
+	// Imported by using the following format: projects/{{project}}/iap_web/appengine-{{appId}}/services/{{service}} roles/iap.httpsResourceAccessor user:jane@example.com
+	"google_iap_app_engine_service_iam_member": config.IdentifierFromProvider,
+	// Imported by using the following format: projects/{{project}}/iap_web/appengine-{{appId}}/services/{{service}}/versions/{{versionId}} roles/iap.httpsResourceAccessor user:jane@example.com
+	"google_iap_app_engine_version_iam_member": config.IdentifierFromProvider,
+	// Imported by using the following format: projects/{{project}}/iap_web roles/iap.httpsResourceAccessor user:jane@example.com
+	"google_iap_tunnel_iam_member": config.TemplatedStringAsIdentifier("", "/projects/{{ .setup.configuration.project }}/iap_web {{ .parameters.role }} {{ .parameters.member }}"),
 
 	// identityplatform
 	//
@@ -447,6 +515,8 @@ var externalNameConfigs = map[string]config.ExternalName{
 	"google_identity_platform_tenant_inbound_saml_config": config.IdentifierFromProvider,
 	// Imported by using the following: projects/{{project}}/tenants/{{tenant}}/oauthIdpConfigs/{{name}}
 	"google_identity_platform_tenant_oauth_idp_config": config.IdentifierFromProvider,
+	// Imported by using the following projects/{{project}}/config/{{name}}
+	"google_identity_platform_project_default_config": config.IdentifierFromProvider,
 
 	// kms
 	//
@@ -462,6 +532,8 @@ var externalNameConfigs = map[string]config.ExternalName{
 	"google_kms_crypto_key_iam_member": config.IdentifierFromProvider,
 	// This resource does not support import.
 	"google_kms_secret_ciphertext": config.IdentifierFromProvider,
+	// Imported by using the following {{name}}
+	"google_kms_crypto_key_version": config.IdentifierFromProvider,
 
 	// monitoring
 	//
@@ -481,6 +553,8 @@ var externalNameConfigs = map[string]config.ExternalName{
 	"google_monitoring_metric_descriptor": config.IdentifierFromProvider,
 	// Slo can be imported using Name
 	"google_monitoring_slo": config.IdentifierFromProvider,
+	// Imported by using the following projects/{{project}}/services/{{service_id}}
+	"google_monitoring_service": config.TemplatedStringAsIdentifier("service_id", "projects/{{ .setup.configuration.project }}/services/{{ .external_name }}"),
 
 	// notebooks
 	//
@@ -651,6 +725,12 @@ var externalNameConfigs = map[string]config.ExternalName{
 	"google_storage_default_object_access_control": config.IdentifierFromProvider,
 	// No import documented.
 	"google_storage_default_object_acl": config.IdentifierFromProvider,
+	// Imported by using the following {{bucket}}/{{object}}/{{entity}}
+	"google_storage_object_access_control": config.IdentifierFromProvider,
+	// No Import
+	"google_storage_object_acl": config.IdentifierFromProvider,
+	// Imported by using the following projects/{{project}}/agentPools/{{name}}
+	"google_storage_transfer_agent_pool": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/agentPools/{{ .external_name }}"),
 
 	// bigquery
 	//
@@ -745,6 +825,10 @@ var externalNameConfigs = map[string]config.ExternalName{
 	"google_apigee_instance": config.TemplatedStringAsIdentifier("name", "{{ .parameters.org_id }}/instances/{{ .external_name }}"),
 	// Imported by using the following format: organizations/{{name}}
 	"google_apigee_organization": config.IdentifierFromProvider,
+	// Imported by using the following format: {{instance_id}}/natAddresses/{{name}}
+	"google_apigee_nat_address": config.TemplatedStringAsIdentifier("name", "{{ .parameters.instance_id }}/natAddresses/{{ .external_name }}"),
+	// Imported by using the following format: {{org_id}}/environments/{{environment}} roles/viewer user:jane@example.com
+	"google_apigee_environment_iam_member": config.IdentifierFromProvider,
 
 	// binaryauthorization
 	//
@@ -763,6 +847,15 @@ var externalNameConfigs = map[string]config.ExternalName{
 	"google_dataproc_job": config.IdentifierFromProvider,
 	// Imported by using the following format: projects/{{project}}/locations/{{location}}/workflowTemplates/{{name}}
 	"google_dataproc_workflow_template": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/locations/{{ .parameters.location }}/workflowTemplates/{{ .external_name }}"),
+	// Imported by using the following projects/{{project}}/locations/{{location}}/services/{{service_id}}
+	"google_dataproc_metastore_service": config.TemplatedStringAsIdentifier("service_id", "projects/{{ .setup.configuration.project }}/locations/{{ .parameters.location }}/services/{{ .external_name }}"),
+
+	// iam
+	//
+	// Imported by using the following projects/{{project}}/locations/global/workloadIdentityPools/{{workload_identity_pool_id}}
+	"google_iam_workload_identity_pool": config.TemplatedStringAsIdentifier("workload_identity_pool_id", "projects/{{ .setup.configuration.project }}/locations/global/workloadIdentityPools/{{ .external_name }}"),
+	// Imported by using the following projects/{{project}}/locations/global/workloadIdentityPools/{{workload_identity_pool_id}}/providers/{{workload_identity_pool_provider_id}}
+	"google_iam_workload_identity_pool_provider": config.TemplatedStringAsIdentifier("workload_identity_pool_provider_id", "projects/{{ .setup.configuration.project }}/locations/global/workloadIdentityPools/{{ .parameters.workload_identity_pool_id }}/providers/{{ .external_name }}"),
 
 	// datalossprevention
 	//
@@ -789,6 +882,66 @@ var externalNameConfigs = map[string]config.ExternalName{
 	// Project-level logging sinks can be imported using their URI
 	// projects/my-project/sinks/my-sink
 	"google_logging_project_sink": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/sinks/{{ .external_name }}"),
+
+	// vertexai
+	//
+	// No Import
+	"google_vertex_ai_dataset": config.IdentifierFromProvider,
+	// Imported by using the following projects/{{project}}/locations/{{region}}/featurestores/{{name}}
+	"google_vertex_ai_featurestore": config.IdentifierFromProvider,
+	// Imported by using the following {{featurestore}}/entityTypes/{{name}}
+	"google_vertex_ai_featurestore_entitytype": config.IdentifierFromProvider,
+	// Imported by using the following projects/{{project}}/locations/{{region}}/tensorboards/{{name}}
+	"google_vertex_ai_tensorboard": config.TemplatedStringAsIdentifier("display_name", "projects/{{ .setup.configuration.project }}/locations/{{ .parameters.region }}/tensorboards/{{ .external_name }}"),
+
+	// documentai
+	//
+	// Imported by using the following projects/{{project}}/locations/{{location}}/processors/{{name}}
+	"google_document_ai_processor": config.IdentifierFromProvider,
+
+	// artifactregistry
+	//
+	// Imported by using the following format: projects/{{project}}/locations/{{location}}/repositories/{{repository_id}}
+	"google_artifact_registry_repository": config.TemplatedStringAsIdentifier("repository_id", "projects/{{ .setup.configuration.project }}/locations/{{ .parameters.location }}/repositories/{{ .external_name }}"),
+	// Imported by using the following format: projects/{{project}}/locations/{{location}}/repositories/{{repository}} roles/artifactregistry.reader user:jane@example.com
+	"google_artifact_registry_repository_iam_member": config.IdentifierFromProvider,
+
+	// beyondcorp
+	//
+	// Imported by using the following projects/{{project}}/locations/{{region}}/appConnections/{{name}}
+	"google_beyondcorp_app_connection": config.IdentifierFromProvider,
+	// Imported by using the following projects/{{project}}/locations/{{region}}/appConnectors/{{name}}
+	"google_beyondcorp_app_connector": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/locations/{{ .parameters.region }}/appConnectors/{{ .external_name }}"),
+	// Imported by using the following projects/{{project}}/locations/{{region}}/appGateways/{{name}}
+	"google_beyondcorp_app_gateway": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/locations/{{ .parameters.region }}/appGateways/{{ .external_name }}"),
+
+	// bigqueryanalyticshub
+	//
+	// Imported by using the following projects/{{project}}/locations/{{location}}/dataExchanges/{{data_exchange_id}}
+	"google_bigquery_analytics_hub_data_exchange": config.IdentifierFromProvider,
+	// Imported by using the following projects/{{project}}/locations/{{location}}/dataExchanges/{{data_exchange_id}}/listings/{{listing_id}}
+	"google_bigquery_analytics_hub_listing": config.TemplatedStringAsIdentifier("listing_id", "projects/{{ .setup.configuration.project }}/locations/{{ .parameters.location }}/dataExchanges/{{ .parameters.data_exchange_id }}/listings/{{ .external_name }}"),
+	// Imported by using the following projects/{{project}}/locations/{{location}}/dataExchanges/{{data_exchange_id}} roles/viewer user:jane@example.com
+	"google_bigquery_analytics_hub_data_exchange_iam_member": config.IdentifierFromProvider,
+
+	// tpu
+	//
+	// Imported by using the following projects/{{project}}/locations/{{zone}}/nodes/{{name}}
+	"google_tpu_node": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/locations/{{ .parameters.zone }}/nodes/{{ .external_name }}"),
+
+	// workflows
+	//
+	// No import
+	"google_workflows_workflow": config.IdentifierFromProvider,
+
+	// certificatemanager
+	//
+	// projects/{{project}}/locations/global/certificates/{{name}}
+	"google_certificate_manager_certificate": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/locations/global/certificates/{{ .external_name }}"),
+	// projects/{{project}}/locations/global/dnsAuthorizations/{{name}}
+	"google_certificate_manager_dns_authorization": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/locations/global/dnsAuthorizations/{{ .external_name }}"),
+	// Imported by using the following projects/{{project}}/locations/global/certificateMaps/{{map}}/certificateMapEntries/{{name}}
+	"google_certificate_manager_certificate_map_entry": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/locations/global/certificateMaps/{{ .parameters.map }}/certificateMapEntries/{{ .external_name }}"),
 }
 
 // TemplatedStringAsIdentifierWithNoName uses TemplatedStringAsIdentifier but
